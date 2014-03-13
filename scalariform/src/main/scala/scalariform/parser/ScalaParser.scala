@@ -2037,7 +2037,7 @@ object ScalaParser {
 
   trait ExprElementFlattenable { def elements: List[ExprElement] }
   //@see https://issues.scala-lang.org/browse/SI-7629
-  private type ExprFlattenableView[A] = A => ExprElementFlattenable
+  private type ExprFlattenableView[A] = A ⇒ ExprElementFlattenable
   case class ExprElements(elements: List[ExprElement]) extends ExprElementFlattenable
   def exprElementFlatten[T: ExprFlattenableView]: (T ⇒ List[ExprElement]) = t ⇒ { exprElementFlatten2(t) }
   def exprElementFlatten2[T: ExprFlattenableView](t: T): List[ExprElement] = groupGeneralTokens(t.elements)
@@ -2088,7 +2088,7 @@ object ScalaParser {
   trait TypeElementFlattenable { def elements: List[TypeElement] }
   case class TypeElements(elements: List[TypeElement]) extends TypeElementFlattenable
   //@see https://issues.scala-lang.org/browse/SI-7629
-  private type TypeFlattenableView[A] = A => TypeElementFlattenable
+  private type TypeFlattenableView[A] = A ⇒ TypeElementFlattenable
   def typeElementFlatten[T: TypeFlattenableView]: (T ⇒ List[TypeElement]) = _.elements
   def typeElementFlatten2[T: TypeFlattenableView](t: T): List[TypeElement] = t.elements
   def typeElementFlatten3(flattenables: TypeElementFlattenable*): List[TypeElement] = flattenables.toList flatMap { _.elements }
