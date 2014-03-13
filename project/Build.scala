@@ -23,8 +23,8 @@ object Build extends sbt.Build {
    assert(specVersion == "1.7", mismatchedSpecificationMessage)
 
   lazy val commonSettings = Defaults.defaultSettings ++ SbtScalariform.defaultScalariformSettings ++ Seq(
-    organization := "com.danieltrinh",
-    version := "0.1.5-SNAPSHOT",
+    organization := "com.sandinh",
+    version := "0.1.5",
     scalaVersion := "2.10.3",
     crossScalaVersions := Seq(
       "2.11.0-RC1",
@@ -111,8 +111,8 @@ object Build extends sbt.Build {
       </license>
     </licenses>
     <scm>
-      <url>git@github.com:daniel-trinh/scalariform.git</url>
-      <connection>scm:git:git@github.com:daniel-trinh/scalariform</connection>
+      <url>git@github.com:giabao/scalariform.git</url>
+      <connection>scm:git:git@github.com:giabao/scalariform</connection>
     </scm>
     <developers>
       <developer>
@@ -124,6 +124,11 @@ object Build extends sbt.Build {
         <id>daniel-trinh</id>
         <name>Daniel Trinh</name>
         <url>https://github.com/daniel-trinh/</url>
+      </developer>
+      <developer>
+        <id>giabao</id>
+        <name>Gia Bao</name>
+        <url>https://chanphom.com</url>
       </developer>
     </developers>
 }
