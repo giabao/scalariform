@@ -28,15 +28,11 @@ object Build extends sbt.Build {
     scalaVersion := "2.10.3",
     crossScalaVersions := Seq(
       "2.11.0-RC1",
-      "2.10.0", "2.10.1",
-      "2.9.3", "2.9.2", "2.9.1-1", "2.9.1", "2.9.0-1", "2.9.0"
+      "2.10.0", "2.10.1"
     ),
     exportJars := true, // Needed for cli oneJar
     retrieveManaged := true,
-    scalacOptions <<= scalaVersion map {
-      case r"2.9.*" ⇒ Seq("-deprecation")
-      case _        ⇒ Seq("-deprecation", "-feature")
-    },
+    scalacOptions := Seq("-deprecation", "-feature"),
     EclipseKeys.withSource := true,
     EclipseKeys.eclipseOutput := Some("bin"))
 
@@ -54,11 +50,7 @@ object Build extends sbt.Build {
     def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ ⇒ "x"): _*)
   }
 
-  def getScalaTestDependency(scalaVersion: String) = scalaVersion match {
-    case r"2.11.*" | r"2.10.*" ⇒ "org.scalatest" %% s"scalatest"  % "2.1.0" % "test"
-    case "2.9.3"     ⇒ "org.scalatest" %% "scalatest"      % "1.9.2" % "test"
-    case _           ⇒ "org.scalatest" %% "scalatest"      % "1.7.2" % "test"
-  }
+  val scalaTestDependency = "org.scalatest" %% s"scalatest"  % "2.1.0" % "test"
 
   def get2_11Dependencies(scalaVersion: String): List[ModuleID] = scalaVersion match {
     case r"2.11.0.*" ⇒ List(
@@ -72,7 +64,7 @@ object Build extends sbt.Build {
     subprojectSettings ++ sbtbuildinfo.Plugin.buildInfoSettings ++ eclipseSettings ++
       Seq(
         libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) ⇒
-          deps ++ get2_11Dependencies(sv) :+ getScalaTestDependency(sv)
+          deps ++ get2_11Dependencies(sv) :+ scalaTestDependency
         },
         testOptions in Test += Tests.Argument("-oI"),
         pomExtra := pomExtraXml,
