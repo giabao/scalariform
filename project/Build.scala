@@ -33,7 +33,10 @@ object Build extends sbt.Build {
     ),
     exportJars := true, // Needed for cli oneJar
     retrieveManaged := true,
-    scalacOptions ++= Seq("-deprecation", "-feature"),
+    scalacOptions <<= scalaVersion map {
+      case r"2.9.*" ⇒ Seq("-deprecation")
+      case _        ⇒ Seq("-deprecation", "-feature")
+    },
     EclipseKeys.withSource := true,
     EclipseKeys.eclipseOutput := Some("bin"))
 
@@ -48,7 +51,7 @@ object Build extends sbt.Build {
     publishLocal := ())) aggregate (scalariform, cli, misc)
 
   implicit class Regex(sc: StringContext) {
-    def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
+    def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ ⇒ "x"): _*)
   }
 
   def getScalaTestDependency(scalaVersion: String) = scalaVersion match {
@@ -58,11 +61,11 @@ object Build extends sbt.Build {
   }
 
   def get2_11Dependencies(scalaVersion: String): List[ModuleID] = scalaVersion match {
-    case r"2.11.0.*" => List(
+    case r"2.11.0.*" ⇒ List(
       "org.scala-lang.modules" %% "scala-xml" % "1.0.0",
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.0"
     )
-    case _ => Nil
+    case _ ⇒ Nil
   }
 
   lazy val scalariform: Project = Project("scalariform", file("scalariform"), settings =
